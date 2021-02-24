@@ -3,41 +3,32 @@ package main
 type Color int8
 
 const (
-	Black = -1
-	White = 1
+	White = 0
+	Black = 1
 )
 
 type Mover interface {
 	Move(board Board, from, to Square) bool
+	Color() Color
 }
 
-type Piece struct{ Color }
+type Piece struct{ color Color }
 
-type Pawn struct {
-	Piece
-	EnPassant bool
-}
+func (p Piece) Color() Color { return p.color }
 
-func (p Pawn) Move(board Board, from, to Square) bool {
-	panic("implement me")
-}
+func (p Pawn) Move(board Board, from, to Square) bool   { panic("implement me") }
+func (k Knight) Move(board Board, from, to Square) bool { panic("implement me") }
+func (b Bishop) Move(board Board, from, to Square) bool { panic("implement me") }
+func (r Rook) Move(board Board, from, to Square) bool   { panic("implement me") }
+func (q Queen) Move(board Board, from, to Square) bool  { panic("implement me") }
+func (k King) Move(board Board, from, to Square) bool   { panic("implement me") }
 
+type Pawn struct{ Piece }
 type Knight struct{ Piece }
 type Bishop struct{ Piece }
-type Rook struct {
-	Piece
-	Moved bool
-}
+type Rook struct{ Piece }
 type Queen struct{ Piece }
 type King struct {
 	Piece
-	Moved bool
-}
-
-func PieceValue(p Mover) (f float32) {
-	switch p.(type) {
-	case Pawn:
-		f=1.
-	}
-	return
+	Checked bool
 }
