@@ -1,15 +1,17 @@
-package main
+package tests
 
 import (
 	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/Vincent-Carrier/libchess"
 )
 
 func TestSquare_String(t *testing.T) {
 	tests := []struct {
-		sq   Square
+		sq   chess.Square
 		want string
 	}{
 		{0x00, "a1"},
@@ -28,7 +30,7 @@ func TestSquare_String(t *testing.T) {
 
 func TestSq(t *testing.T) {
 	tests := []struct {
-		want Square
+		want chess.Square
 		str  string
 	}{
 		{0x00, "a1"},
@@ -47,7 +49,7 @@ func TestSq(t *testing.T) {
 
 func TestSquare_Inbounds(t *testing.T) {
 	tests := []struct {
-		sq   Square
+		sq   chess.Square
 		want bool
 	}{
 		{Sq("a1"), true},

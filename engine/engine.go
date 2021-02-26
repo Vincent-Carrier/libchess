@@ -1,4 +1,8 @@
-package main
+package engine
+
+import (
+	. "github.com/Vincent-Carrier/libchess"
+)
 
 func PieceValue(p Mover) (f float32) {
 	switch p.(type) {

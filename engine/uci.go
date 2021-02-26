@@ -1,9 +1,13 @@
-package main
+package engine
 
-import "unicode"
+import (
+	"unicode"
 
-func Char(m Mover) (r rune) {
-	switch m.(type) {
+	. "github.com/Vincent-Carrier/libchess"
+)
+
+func Char(p Piece) (r rune) {
+	switch p.Mover.(type) {
 	case Pawn:
 		r = 'p'
 	case Knight:
@@ -19,7 +23,7 @@ func Char(m Mover) (r rune) {
 	default:
 		panic("Invalid argument")
 	}
-	if m.Color() == White {
+	if p.Color == White {
 		r = unicode.ToUpper(r)
 	}
 	return

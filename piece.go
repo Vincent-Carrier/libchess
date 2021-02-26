@@ -1,34 +1,54 @@
-package main
-
-type Color int8
+package chess
 
 const (
-	White = 0
-	Black = 1
+	White Color = 1
+	Black Color = -1
 )
 
-type Mover interface {
-	Move(board Board, from, to Square) bool
-	Color() Color
+type (
+	Color int
+
+	Mover interface {
+		Moves(board *Board, color Color, from Square) []Square
+		//Move(board *Board, color Color, from, to Square) bool
+	}
+
+	Piece struct {
+		Color
+		Mover
+	}
+
+	Pawn   struct{}
+	Knight struct{}
+	Bishop struct{}
+	Rook   struct{}
+	Queen  struct{}
+	King   struct{}
+)
+
+func (p Piece) Moves(board *Board, from Square) []Square {
+	return p.Mover.Moves(board, p.Color, from)
 }
 
-type Piece struct{ color Color }
-
-func (p Piece) Color() Color { return p.color }
-
-func (p Pawn) Move(board Board, from, to Square) bool   { panic("implement me") }
-func (k Knight) Move(board Board, from, to Square) bool { panic("implement me") }
-func (b Bishop) Move(board Board, from, to Square) bool { panic("implement me") }
-func (r Rook) Move(board Board, from, to Square) bool   { panic("implement me") }
-func (q Queen) Move(board Board, from, to Square) bool  { panic("implement me") }
-func (k King) Move(board Board, from, to Square) bool   { panic("implement me") }
-
-type Pawn struct{ Piece }
-type Knight struct{ Piece }
-type Bishop struct{ Piece }
-type Rook struct{ Piece }
-type Queen struct{ Piece }
-type King struct {
-	Piece
-	Checked bool
+func (p Piece) rays(board *Board, from Square, rays []Square) (sqs []Square) {
+	for _, towards := range rays {
+		start := from
+		for {
+			start += towards
+			if capture, ok := board.At(from); ok {
+				switch capture.Color {
+				case p.Color:
+					sqs = append(sqs, from)
+					continue
+				case ^p.Color:
+					continue
+				case 0:
+					sqs = append(sqs, from)
+				}
+			} else {
+				break // outside bounds
+			}
+		}
+	}
+	return
 }

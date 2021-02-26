@@ -1,31 +1,22 @@
-package main
+package chess
 
 import (
 	"fmt"
 	"strconv"
 )
 
-type Square byte
+type Square uint8
 
 const (
-	FileMask  = 0b0111_0000
-	RankMask  = 0b0000_0111
-	BoardMask = 0b1000_1000
+	FileMask  Square = 0x70
+	RankMask  Square = 0x07
+	BoardMask Square = 0x88
+
+	NullSq Square = 0xFF
+	Row    Square = 0x0F
 )
 
-func (sq Square) Rank() byte {
-	return byte(sq&FileMask) >> 4
-}
-
-func (sq Square) File() byte {
-	return byte(sq & RankMask)
-}
-
-func (sq Square) String() string {
-	return fmt.Sprintf("%c%d", 'a'+sq.File(), sq.Rank()+1)
-}
-
-func ParseSq(s string) (sq Square, err error) {
+func ScanSq(s string) (sq Square, err error) {
 	if len(s) != 2 {
 		err = fmt.Errorf("invalid string length, expected 2")
 		return
@@ -40,6 +31,18 @@ func ParseSq(s string) (sq Square, err error) {
 	rank := byte(n-1) << 4
 	sq = Square(rank | file)
 	return
+}
+
+func (sq Square) Rank() uint8 {
+	return uint8(sq&FileMask) >> 4
+}
+
+func (sq Square) File() uint8 {
+	return uint8(sq & RankMask)
+}
+
+func (sq Square) String() string {
+	return fmt.Sprintf("%c%d", 'a'+sq.File(), sq.Rank()+1)
 }
 
 func (sq Square) Inbounds() bool {

@@ -1,4 +1,4 @@
-module github.com/Vincent-Carrier/0x88chess
+module github.com/Vincent-Carrier/libchess
 
 go 1.16
 
