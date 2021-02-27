@@ -24,6 +24,14 @@ func (p Piece) rays(board *Board, from Sq, rays []Sq) (sqs []Sq) {
 	return
 }
 
+func (r Rook) Rays() []Sq {
+	return []Sq{-1, 1, -0xFF, 0xFF}
+}
+
+func (r Rook) Moves(board *Board, color Color, from Sq) []Sq {
+	panic("implement me")
+}
+
 func (k King) Moves(board *Board, color Color, from Sq) []Sq {
 	panic("implement me")
 }
@@ -32,9 +40,6 @@ func (q Queen) Moves(board *Board, color Color, from Sq) []Sq {
 	panic("implement me")
 }
 
-func (r Rook) Moves(board *Board, color Color, from Sq) []Sq {
-	panic("implement me")
-}
 
 func (b Bishop) Moves(board *Board, color Color, from Sq) []Sq {
 	panic("implement me")

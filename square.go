@@ -4,10 +4,10 @@ import (
 	"fmt"
 )
 
-type Sq uint8
+type Sq int16
 
 const (
-	FileMask  Sq = 0x70
+	FILE_MASK Sq = 0x70
 	RankMask  Sq = 0x07
 	BoardMask Sq = 0x88
 
@@ -15,12 +15,12 @@ const (
 	Row    Sq = 0x0F
 )
 
-func (sq Sq) Rank() uint8 {
-	return uint8(sq&FileMask) >> 4
+func (sq Sq) Rank() int16 {
+	return int16(sq&FILE_MASK) >> 4
 }
 
-func (sq Sq) File() uint8 {
-	return uint8(sq & RankMask)
+func (sq Sq) File() int16 {
+	return int16(sq & RankMask)
 }
 
 func (sq Sq) String() string {

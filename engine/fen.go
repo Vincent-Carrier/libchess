@@ -18,7 +18,7 @@ func NewGame(fen Fen) (g Game, err error) {
 	)
 	g.Board = new(Board)
 	for i, r := range []rune(fen) {
-		fmt.Printf("i: %d, r: %c, sq: %#x\n", i, r, uint8(sq))
+		fmt.Printf("i: %d, r: %c, sq: %#x\n", i, r, int16(sq))
 		if unicode.IsDigit(r) {
 			skip, _ := strconv.Atoi(string(r))
 			sq += Sq(skip) - 1
