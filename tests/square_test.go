@@ -55,8 +55,8 @@ func TestSquare_Inbounds(t *testing.T) {
 		sq   Sq
 		want bool
 	}{
-		{ScanSq("a1"), true},
-		{ScanSq("h8"), true},
+		{Square("a1"), true},
+		{Square("h8"), true},
 		{0x08, false},
 		{0x78, false},
 		{0xF0, false},

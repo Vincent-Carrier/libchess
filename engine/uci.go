@@ -7,7 +7,7 @@ import (
 )
 
 func Char(p Piece) (r rune) {
-	switch p.Mover.(type) {
+	switch p.Piecer.(type) {
 	case Pawn:
 		r = 'p'
 	case Knight:
@@ -23,7 +23,7 @@ func Char(p Piece) (r rune) {
 	default:
 		panic("Invalid argument")
 	}
-	if p.Color == White {
+	if p.Color == WHITE {
 		r = unicode.ToUpper(r)
 	}
 	return

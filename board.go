@@ -1,6 +1,6 @@
 package chess
 
-type Board [0x78]Piece
+type Board [0x77]Piece
 
 type Game struct {
 	*Board
@@ -13,5 +13,5 @@ type Game struct {
 
 func (b *Board) At(sq Sq) (Piece, bool) {
 	p := b[sq]
-	return p, sq.Inbounds() && p != Piece{}
+	return p, sq.Inbounds()
 }

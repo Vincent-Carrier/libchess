@@ -7,20 +7,16 @@ import (
 type Sq int16
 
 const (
-	FILE_MASK Sq = 0x70
-	RankMask  Sq = 0x07
-	BoardMask Sq = 0x88
-
-	NullSq Sq = 0xFF
-	Row    Sq = 0x0F
+	NIL_SQ Sq = -1
+	ROW    Sq = 0x0F
 )
 
 func (sq Sq) Rank() int16 {
-	return int16(sq&FILE_MASK) >> 4
+	return int16(sq&0x70) >> 4
 }
 
 func (sq Sq) File() int16 {
-	return int16(sq & RankMask)
+	return int16(sq & 0x07)
 }
 
 func (sq Sq) String() string {
@@ -28,5 +24,5 @@ func (sq Sq) String() string {
 }
 
 func (sq Sq) Inbounds() bool {
-	return sq&BoardMask == 0
+	return sq&0x88 == 0
 }

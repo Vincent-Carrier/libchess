@@ -27,7 +27,7 @@ func NewGame(fen Fen) (g Game, err error) {
 			g.Board[sq] = p
 			sq++
 		} else if r == '/' {
-			sq -= Row + 8
+			sq -= ROW + 8
 		} else {
 			stateIdx = i + 1
 			break
@@ -43,9 +43,9 @@ func NewGame(fen Fen) (g Game, err error) {
 
 	switch active {
 	case 'w':
-		g.Active = White
+		g.Active = WHITE
 	case 'b':
-		g.Active = Black
+		g.Active = BLACK
 	}
 	for _, r := range []rune(castles) {
 		switch r {
@@ -72,7 +72,7 @@ func StartingPosition() Game {
 }
 
 func newPiece(r rune) (Piece, error) {
-	var m Mover
+	var m Piecer
 	var c Color
 	switch unicode.ToLower(r) {
 	case 'p':
@@ -92,9 +92,9 @@ func newPiece(r rune) (Piece, error) {
 	}
 
 	if unicode.IsLower(r) {
-		c = Black
+		c = BLACK
 	} else {
-		c = White
+		c = WHITE
 	}
 
 	return Piece{c, m}, nil

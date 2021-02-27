@@ -4,7 +4,7 @@ import (
 	. "github.com/Vincent-Carrier/libchess"
 )
 
-func PieceValue(p Mover) (f float32) {
+func PieceValue(p Piecer) (f float32) {
 	switch p.(type) {
 	case Pawn:
 		f = 1.
