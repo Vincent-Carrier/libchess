@@ -6,12 +6,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/Vincent-Carrier/libchess"
+	. "github.com/Vincent-Carrier/libchess"
 )
 
 func TestSquare_String(t *testing.T) {
 	tests := []struct {
-		sq   chess.Square
+		sq   Sq
 		want string
 	}{
 		{0x00, "a1"},
@@ -28,19 +28,22 @@ func TestSquare_String(t *testing.T) {
 	}
 }
 
-func TestSq(t *testing.T) {
+func TestSquare_Scan(t *testing.T) {
 	tests := []struct {
-		want chess.Square
+		want Sq
 		str  string
 	}{
 		{0x00, "a1"},
 		{0x07, "h1"},
 		{0x34, "e4"},
 		{0x77, "h8"},
+		{0xFF, "-"},
 	}
 	for _, tt := range tests {
 		t.Run("from "+tt.str, func(t *testing.T) {
-			if got := Sq(tt.str); got != tt.want {
+			var got Sq
+			if _, err := fmt.Sscan(tt.str, &got); got != tt.want {
+				assert.Nil(t, err)
 				assert.Equal(t, tt.want, got)
 			}
 		})
@@ -49,13 +52,16 @@ func TestSq(t *testing.T) {
 
 func TestSquare_Inbounds(t *testing.T) {
 	tests := []struct {
-		sq   chess.Square
+		sq   Sq
 		want bool
 	}{
-		{Sq("a1"), true},
-		{Sq("h8"), true},
+		{ScanSq("a1"), true},
+		{ScanSq("h8"), true},
 		{0x08, false},
 		{0x78, false},
+		{0xF0, false},
+		{0x0F, false},
+		{0xFF, false},
 	}
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%v", tt.sq), func(t *testing.T) {

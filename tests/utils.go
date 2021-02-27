@@ -1,19 +1,16 @@
 package tests
 
 import (
-	"log"
+	"fmt"
 
-	"github.com/Vincent-Carrier/libchess"
+	. "github.com/Vincent-Carrier/libchess"
 )
 
-func Sq(s string) chess.Square {
-	sq, err := chess.ScanSq(s)
-	Crash(err)
-	return sq
-}
-
-func Crash(err error) {
+func ScanSq(str string) (sq Sq) {
+	_, err := fmt.Sscan(str, &sq)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
+
+	return sq
 }
