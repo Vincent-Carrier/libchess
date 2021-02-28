@@ -1,11 +1,9 @@
-package engine
+package chess
 
 import (
 	"fmt"
 	"strconv"
 	"unicode"
-
-	. "github.com/Vincent-Carrier/libchess"
 )
 
 type Fen string

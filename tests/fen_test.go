@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	. "github.com/Vincent-Carrier/libchess"
-	. "github.com/Vincent-Carrier/libchess/engine"
 )
 
 func TestNewGame(t *testing.T) {
