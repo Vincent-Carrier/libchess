@@ -14,7 +14,7 @@ func Square(str string) (sq Sq) {
 }
 
 func (b *Board) Setup(color Color, moves... string) {
-	var move BasicMove
+	var move Move
 	for _, str := range moves {
 		_, err := fmt.Sscan(str, &move)
 		if err != nil {

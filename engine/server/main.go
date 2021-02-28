@@ -35,8 +35,8 @@ func main() {
 		cors.Default().Handler,
 	)
 
-	r.Get("/moves", func(w http.ResponseWriter, r *http.Request) {
-
+	r.Get("/game/{fen}", func(w http.ResponseWriter, r *http.Request) {
+		fen := chi.URLParam(r, "fen")
 		game, err := chess.NewGame(fen)
 		RenderJson(w, map[string]interface{}{
 			"square": chess.Square("e4"),

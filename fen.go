@@ -6,9 +6,7 @@ import (
 	"unicode"
 )
 
-type Fen string
-
-func NewGame(fen Fen) (g Game, err error) {
+func NewGame(fen string) (g Game, err error) {
 	var (
 		sq       Sq = 0x70
 		p        Piece
@@ -36,7 +34,7 @@ func NewGame(fen Fen) (g Game, err error) {
 		active    rune
 		castles   string
 	)
-	_, err = fmt.Sscanf(string(fen[stateIdx:]), "%c %s %v %d %d",
+	_, err = fmt.Sscanf(fen[stateIdx:], "%c %s %v %d %d",
 		&active, &castles, &g.EnPassant, &g.HalfMoveClock, &g.FullMoves)
 
 	switch active {

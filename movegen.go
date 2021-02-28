@@ -10,66 +10,82 @@ var (
 	}
 )
 
-func slide(board *Board, c Color, from Sq, towards Sq) (Sq, Piece, bool) {
+func slide(g *Game, from, towards Sq) (Sq, Piece, bool) {
 	sq := from + towards
-	capture, ok := board.At(from)
-	return sq, capture, ok && c != capture.Color
+	capture, ok := g.At(from)
+	return sq, capture, ok && g.Active != capture.Color
 }
 
-func rays(board *Board, c Color, from Sq, rays []Sq) (sqs []Sq) {
+func push(moves Moves, from, to Sq, capture Piece, color Color) bool {
+	var move Mover = Move{from, to}
+	if capture.Color == -color {
+		move = Capture{move.(Move), capture}
+		moves = append(moves, move)
+		return false
+	}
+	moves = append(moves, move)
+	return true
+}
+
+func ray(g *Game, from, towards Sq, moves Moves) {
+	if to, capture, ok := slide(g, from, towards); !ok {
+		return
+	} else {
+		push(moves, from, to, capture, g.Active)
+		ray(g, to, towards, moves)
+	}
+}
+
+func rays(g *Game, from Sq, rays []Sq) (result Moves) {
 	for _, towards := range rays {
-		for {
-			if sq, capture, ok := slide(board, c, from, towards); !ok {
-				break
-			} else {
-				sqs = append(sqs, sq)
-				if capture.Color == -c {
-					break
-				}
-			}
-		}
+		ray(g, from, towards, result)
 	}
 	return
 }
 
-func (p Pawn) Moves(board *Board, color Color, from Sq) (sqs []Sq) {
-	for i := 0; i < 2; i += int(color) {
-		sq, capture, ok := slide(board, color, from, Sq(i+1)*ROW)
-		if ok && capture.Color != -color {
-			sqs = append(sqs, sq)
+func (p Pawn) Moves(g *Game, from Sq) (moves Moves) {
+	fwd := Sq(g.Active)
+	to, capture, ok := slide(g, from, fwd*ROW)
+	if ok && capture.Color != -g.Active {
+		moves = append(moves, Move{from, to})
+	}
+	if from.Rank() == g.Active.pawnRow() {
+		to, capture, ok := slide(g, from, 2*fwd*ROW)
+		if ok && capture.Color != -g.Active {
+			moves = append(moves, Move{from, to})
 		}
 	}
 	for _, x := range []int{-1, 1} {
-		if sq, _, ok := slide(board, color, from, Sq(x)+ROW*Sq(color)); ok {
-			sqs = append(sqs, sq)
+		if to, capture, ok := slide(g, from, Sq(x)+fwd*ROW); ok {
+			push(moves, from, to, capture, g.Active)
 		}
 	}
 	return
 }
 
-func (k Knight) Moves(board *Board, color Color, from Sq) (sqs []Sq) {
+func (k Knight) Moves(g *Game, from Sq) (moves Moves) {
 	for _, ray := range KNIGHT_RAYS {
-		if sq, _, ok := slide(board, color, from, ray); ok {
-			sqs = append(sqs, sq)
+		if to, capture, ok := slide(g, from, ray); ok {
+			push(moves, from, to, capture, g.Active)
 		}
 	}
 	return
 }
 
-func (b Bishop) Moves(board *Board, color Color, from Sq) []Sq {
-	return rays(board, color, from, BISHOP_RAYS)
+func (b Bishop) Moves(g *Game, from Sq) Moves {
+	return rays(g, from, BISHOP_RAYS)
 }
-func (r Rook) Moves(board *Board, color Color, from Sq) []Sq {
-	return rays(board, color, from, ROOK_RAYS)
+func (r Rook) Moves(g *Game, from Sq) Moves {
+	return rays(g, from, ROOK_RAYS)
 }
-func (q Queen) Moves(board *Board, color Color, from Sq) []Sq {
-	return rays(board, color, from, QUEEN_RAYS)
+func (q Queen) Moves(g *Game, from Sq) Moves {
+	return rays(g, from, QUEEN_RAYS)
 }
 
-func (k King) Moves(board *Board, color Color, from Sq) (sqs []Sq) {
+func (k King) Moves(g *Game, from Sq) (moves Moves) {
 	for _, ray := range QUEEN_RAYS {
-		if sq, _, ok := slide(board, color, from, ray); ok {
-			sqs = append(sqs, sq)
+		if to, capture, ok := slide(g, from, ray); ok {
+			push(moves, from, to, capture, g.Active)
 		}
 	}
 	return

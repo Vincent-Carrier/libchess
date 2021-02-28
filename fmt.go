@@ -65,7 +65,7 @@ func (p *Piece) Scan(state fmt.ScanState, verb rune) error {
 	return nil
 }
 
-func (m *BasicMove) Scan(state fmt.ScanState, _ rune) error {
+func (m *Move) Scan(state fmt.ScanState, _ rune) error {
 	r, _, err := state.ReadRune()
 	if err != nil {
 		return err
