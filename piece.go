@@ -16,7 +16,7 @@ type (
 
 	Piece struct {
 		Color
-		Piecer
+		Kind Piecer
 	}
 
 	Pawn   struct{}
@@ -27,13 +27,12 @@ type (
 	King   struct{}
 )
 
-
 func (p Piece) Moves(g *Game, from Sq) Moves {
-	return p.Piecer.Moves(g, from)
+	return p.Kind.Moves(g, from)
 }
 
-func (c Color) pawnRow() int16 {
-	switch c {
+func (color Color) pawnRow() Sq {
+	switch color {
 	case WHITE:
 		return 1
 	case BLACK:

@@ -1,10 +1,14 @@
 package chess
 
+import "fmt"
+
 type (
 	Mover interface {
 		//Validate(g *Game) bool
 		Execute(g *Game)
+		fmt.Stringer
 	}
+
 	Moves []Mover
 
 	Move struct {
