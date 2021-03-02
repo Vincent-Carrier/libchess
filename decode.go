@@ -88,7 +88,7 @@ func (b *Board) Scan(state fmt.ScanState, _ rune) (err error) {
 			sq += Sq(r - '0')
 		} else if r == '/' {
 			sq -= ROW
-			sq -= sq.File()
+			sq -= sq & 0x08
 		} else if _, err = fmt.Sscan(string(r), &p); err == nil {
 			b[sq] = p
 			sq++

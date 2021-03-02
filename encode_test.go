@@ -11,10 +11,11 @@ func TestBoard_String(t *testing.T) {
 		g := StartingPosition()
 		fen := g.Board.String()
 		assert.Equal(t, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", fen)
-
 	})
+
 	t.Run("e2-e4", func(t *testing.T) {
 		g := StartingPosition()
+		g.move("e2-e4")
 		fen := g.Board.String()
 		assert.Equal(t, "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR", fen)
 	})

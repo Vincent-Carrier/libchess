@@ -3,7 +3,6 @@ package chess
 import (
 	"bytes"
 	"fmt"
-	"strconv"
 	"unicode"
 )
 
@@ -51,9 +50,9 @@ func (b *Board) String() string {
 	var buf bytes.Buffer
 	var skip int
 	for sq := Sq(0x70); sq != 0x07; {
-		if p, _ := b.At(sq); p.Color != EMPTY {
+		if p, ok := b.At(sq); ok && p.Color != EMPTY {
 			if skip > 0 {
-				buf.WriteString(strconv.Itoa(skip))
+				buf.WriteString(fmt.Sprint(skip))
 				skip = 0
 			}
 			buf.WriteRune(p.char())
@@ -61,14 +60,18 @@ func (b *Board) String() string {
 			skip++
 		}
 
-		if sq.File() == 7 {
+		if sq.File() >= 7 {
+			if skip > 0 {
+				buf.WriteString(fmt.Sprint(skip))
+				skip = 0
+			}
 			buf.WriteRune('/')
-			skip = 0
 			sq -= ROW
-			sq -= Sq(sq.File())
+			sq -= sq.File()
 		} else {
 			sq++
 		}
 	}
+	buf.WriteRune(b[0x07].char())
 	return buf.String()
 }
