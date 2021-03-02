@@ -46,3 +46,13 @@ func TestBoard_Scan(t *testing.T) {
 		})
 	}
 }
+
+func TestGame_Scan(t *testing.T) {
+	g := StartingPosition()
+	assert.Equal(t, Piece{WHITE, Pawn{}}, g.Board[at("e2")])
+	assert.Equal(t, WHITE, g.Active)
+	assert.True(t, g.Castles[0][0])
+	assert.Equal(t, NIL_SQ, g.EnPassant)
+	assert.Equal(t, 0, g.HalfMoveClock)
+	assert.Equal(t, 1, g.FullMoves)
+}

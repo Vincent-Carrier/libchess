@@ -14,7 +14,7 @@ func (sq *Sq) Scan(state fmt.ScanState, _ rune) error {
 		*sq = NIL_SQ
 		return nil
 	} else if 'a' > r || r > 'h' {
-		return fmt.Errorf("invalid character for square's file: %c", r)
+		return fmt.Errorf("invalid rune for square's file: %c", r)
 	}
 	file = int16(r - 'a')
 
@@ -22,7 +22,7 @@ func (sq *Sq) Scan(state fmt.ScanState, _ rune) error {
 	if err != nil {
 		return err
 	} else if '1' > r || r > '8' {
-		return fmt.Errorf("invalid character for square's rank: %c", r)
+		return fmt.Errorf("invalid rune for square's rank: %c", r)
 	}
 	rank = int16(r-'1') << 4
 
@@ -67,7 +67,7 @@ func (p *Piece) Scan(state fmt.ScanState, verb rune) error {
 	case 'K':
 		p.Kind = King{}
 	default:
-		return fmt.Errorf("invalid char %c", r)
+		return fmt.Errorf("invalid piece rune %c", r)
 	}
 	if unicode.IsUpper(verb) {
 		return nil
@@ -93,7 +93,7 @@ func (b *Board) Scan(state fmt.ScanState, _ rune) (err error) {
 			b[sq] = p
 			sq++
 		} else {
-			return fmt.Errorf("invalid char %c", r)
+			return fmt.Errorf("invalid board rune %c", r)
 		}
 	}
 	return
@@ -115,7 +115,7 @@ func (c *Castles) Scan(state fmt.ScanState, _ rune) error {
 		case 'k':
 			c[1][1] = true
 		default:
-			return fmt.Errorf("invalid char %c", r)
+			return fmt.Errorf("invalid castles rune %c", r)
 		}
 	}
 }

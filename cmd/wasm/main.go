@@ -25,9 +25,11 @@ func main() {
 				return nil
 			}
 			piece, _ := g.At(sq)
+
+			fmt.Println("inside Board.moves")
 			var moves []string
 			for _, move := range piece.Moves(g, sq) {
-				fmt.Printf("%v; %s\n", move, move.String())
+				fmt.Println(move.String())
 				moves = append(moves, move.String())
 			}
 			return moves
