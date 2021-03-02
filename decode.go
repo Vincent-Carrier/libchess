@@ -82,8 +82,8 @@ func (p *Piece) Scan(state fmt.ScanState, verb rune) error {
 
 func (b *Board) Scan(state fmt.ScanState, _ rune) (err error) {
 	var p Piece
-	var r rune
-	for sq := Sq(0x70); r != 0; r, _, err = state.ReadRune() {
+	for sq := Sq(0x70); sq != 0x08; {
+		r, _, err := state.ReadRune()
 		if '1' <= r && r <= '8' {
 			sq += Sq(r - '0')
 		} else if r == '/' {

@@ -4,7 +4,7 @@ type Sq int16
 
 const (
 	NIL_SQ Sq = -1
-	ROW    Sq = 0x0F
+	ROW    Sq = 0x10
 )
 
 // Rank The square's Y position, where 0 corresponds to the white king's row

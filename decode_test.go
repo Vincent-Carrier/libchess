@@ -24,22 +24,25 @@ func TestPiece_Scan(t *testing.T) {
 }
 
 func TestBoard_Scan(t *testing.T) {
-	t.Run("scan board", func(t *testing.T) {
-		var b Board
-		_, err := fmt.Sscan("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", &b)
-		assert.Nil(t, err)
-		assert.Equal(t, Piece{BLACK, Rook{}}, b[at("a1")])
-		assert.Equal(t, Piece{WHITE, Pawn{}}, b[at("e2")])
-		assert.Equal(t, Piece{WHITE, Rook{}}, b[at("h8")])
-		assert.Equal(t, Piece{}, b[at("h3")])
-	})
+	tests := []struct {
+		want Piece
+		Sq
+	}{
+		{Piece{BLACK, Rook{}}, at("a8")},
+		{Piece{BLACK, Knight{}}, at("g8")},
+		{Piece{BLACK, Pawn{}}, at("a7")},
+		{Piece{WHITE, Pawn{}}, at("a2")},
+		{Piece{WHITE, Rook{}}, at("h1")},
+	}
+	var b Board
+	_, err := fmt.Sscan("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", &b)
+	println(b.String())
+	assert.Nil(t, err)
 
-	t.Run("starting position", func(t *testing.T) {
-		got := StartingPosition()
-		assert.Equal(t, Piece{WHITE, Pawn{}}, got.Board[at("e2")])
-		assert.Equal(t, WHITE, got.Active)
-		assert.Equal(t, NIL_SQ, got.EnPassant)
-		assert.Equal(t, 0, got.HalfMoveClock)
-		assert.Equal(t, 1, got.FullMoves)
-	})
+	for i, tt := range tests {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+			got := b[tt.Sq]
+			assert.Equal(t, tt.want, got)
+		})
+	}
 }

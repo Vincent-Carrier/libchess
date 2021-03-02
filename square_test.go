@@ -57,6 +57,7 @@ func TestSquare_Inbounds(t *testing.T) {
 		{at("h8"), true},
 		{0x08, false},
 		{0x78, false},
+		{0x68, false},
 		{0xF0, false},
 		{0x0F, false},
 		{-0x01, false},
@@ -69,4 +70,11 @@ func TestSquare_Inbounds(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSquare_Arithmetic(t *testing.T) {
+	assert.Equal(t, at("a1") + 0x07, at("h1"))
+	assert.Equal(t, at("a1") + ROW, at("a2"))
+	assert.Equal(t, at("a4").Rank(), Sq(3))
+	assert.Equal(t, at("a4").File(), Sq(0))
 }

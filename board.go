@@ -1,7 +1,7 @@
 package chess
 
 type (
-	Board   [0x78]Piece
+	Board   [128]Piece
 	Castles [2][2]bool
 
 	Game struct {

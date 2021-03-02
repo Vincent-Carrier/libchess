@@ -8,6 +8,9 @@ import (
 )
 
 func (sq Sq) String() string {
+	if !sq.Inbounds() {
+		panic("tried to print an out-of-bounds square")
+	}
 	return fmt.Sprintf("%c%d", 'a'+sq.File(), sq.Rank()+1)
 }
 
