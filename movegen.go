@@ -12,11 +12,12 @@ var (
 
 func slide(g *Game, from, towards Sq) (Sq, Piece, bool) {
 	sq := from + towards
-	capture, ok := g.At(from)
+	capture, ok := g.At(sq)
 	return sq, capture, ok && g.Active != capture.Color
 }
 
 func push(moves Moves, from, to Sq, capture Piece, color Color) bool {
+	println("pushed ", to.String())
 	var move Mover = Move{from, to}
 	if capture.Color == -color {
 		move = Capture{move.(Move), capture}
@@ -56,7 +57,7 @@ func (p Pawn) Moves(g *Game, from Sq) (moves Moves) {
 		}
 	}
 	for _, x := range []int{-1, 1} {
-		if to, capture, ok := slide(g, from, Sq(x)+fwd*ROW); ok {
+		if to, capture, ok := slide(g, from, Sq(x)+fwd*ROW); ok && capture.Color == -g.Active {
 			push(moves, from, to, capture, g.Active)
 		}
 	}

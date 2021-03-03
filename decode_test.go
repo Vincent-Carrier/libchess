@@ -28,11 +28,11 @@ func TestBoard_Scan(t *testing.T) {
 		want Piece
 		Sq
 	}{
-		{Piece{BLACK, Rook{}}, at("a8")},
-		{Piece{BLACK, Knight{}}, at("g8")},
-		{Piece{BLACK, Pawn{}}, at("a7")},
-		{Piece{WHITE, Pawn{}}, at("a2")},
-		{Piece{WHITE, Rook{}}, at("h1")},
+		{Piece{BLACK, Rook{}}, square("a8")},
+		{Piece{BLACK, Knight{}}, square("g8")},
+		{Piece{BLACK, Pawn{}}, square("a7")},
+		{Piece{WHITE, Pawn{}}, square("a2")},
+		{Piece{WHITE, Rook{}}, square("h1")},
 	}
 	var b Board
 	_, err := fmt.Sscan("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", &b)
@@ -49,7 +49,7 @@ func TestBoard_Scan(t *testing.T) {
 
 func TestGame_Scan(t *testing.T) {
 	g := StartingPosition()
-	assert.Equal(t, Piece{WHITE, Pawn{}}, g.Board[at("e2")])
+	assert.Equal(t, Piece{WHITE, Pawn{}}, g.Board[square("e2")])
 	assert.Equal(t, WHITE, g.Active)
 	assert.True(t, g.Castles[0][0])
 	assert.Equal(t, NIL_SQ, g.EnPassant)

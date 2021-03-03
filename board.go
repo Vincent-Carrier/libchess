@@ -46,11 +46,9 @@ func (b *Board) At(sq Sq) (Piece, bool) {
 	return p, sq.Inbounds()
 }
 
-func (g *Game) move(s string) error {
-	var from, to Sq
-	_, err := fmt.Sscanf(s, "%v-%v", &from, &to)
-	p, _ := g.At(from)
-	g.Board[to] = p
-	g.Board[from] = Piece{}
-	return err
+func (g *Game) MovesFrom(sq Sq) (moves Moves) {
+	p, ok := g.At(sq)
+	if !ok { panic("invalid square") }
+	moves = p.Moves(g, sq)
+	return
 }
