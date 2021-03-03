@@ -14,7 +14,7 @@ func square(str string) (sq Sq) {
 }
 
 func move(str string) (move Move) {
-	_, err := fmt.Sscan(str, &move)
+	_, err := fmt.Sscanf(str, "%v-%v", &move.From, &move.To)
 	if err != nil {
 		panic(err)
 	}

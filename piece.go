@@ -10,7 +10,7 @@ type (
 	Color int
 
 	Piecer interface {
-		Moves(g *Game, from Sq) Moves
+		Moves(g *Game, from Sq) *Moves
 		//Move(board *Board, color Color, from, to Sq) bool
 	}
 
@@ -28,7 +28,7 @@ type (
 )
 
 func (p Piece) Moves(g *Game, from Sq) Moves {
-	return p.Kind.Moves(g, from)
+	return *p.Kind.Moves(g, from)
 }
 
 func (color Color) pawnRow() Sq {

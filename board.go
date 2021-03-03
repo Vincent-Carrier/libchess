@@ -41,9 +41,11 @@ func StartingPosition() *Game {
 	return game
 }
 
-func (b *Board) At(sq Sq) (Piece, bool) {
-	p := b[sq]
-	return p, sq.Inbounds()
+func (b *Board) At(sq Sq) (p Piece, ok bool) {
+	if !sq.Inbounds() {
+		return
+	}
+	return b[sq], true
 }
 
 func (g *Game) MovesFrom(sq Sq) (moves Moves) {
