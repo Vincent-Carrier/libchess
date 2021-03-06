@@ -1,7 +1,7 @@
 package chess
 
 var (
-	BISHOP_RAYS = []Sq{-ROW - 1, -ROW + 1, +ROW - 1, +1}
+	BISHOP_RAYS = []Sq{-ROW - 1, -ROW + 1, +ROW - 1, +ROW+1}
 	ROOK_RAYS   = []Sq{-1, 1, -ROW, +ROW}
 	QUEEN_RAYS  = append(BISHOP_RAYS, ROOK_RAYS...)
 	KNIGHT_RAYS = []Sq{
@@ -36,7 +36,9 @@ func ray(g *Game, from, towards Sq, moves *Moves) {
 		return
 	} else {
 		moves.push(from, to, capture, g.Active)
-		ray(g, to, towards, moves)
+		if capture.Color != -g.Active {
+			ray(g, to, towards, moves)
+		}
 	}
 }
 
