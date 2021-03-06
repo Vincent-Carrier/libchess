@@ -9,6 +9,11 @@ import (
 	chess "github.com/Vincent-Carrier/libchess"
 )
 
+type match struct {
+	chess.Match
+	js.Value
+}
+
 func main() {
 	done := make(chan bool)
 
