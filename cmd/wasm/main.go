@@ -38,6 +38,25 @@ func main() {
 			}
 			return moves
 		}))
+	chessboard.Get("prototype").Set("exec",
+		js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+			g, err := chess.NewGame(this.Call("fen").String())
+			var from, to chess.Sq
+			_, err = fmt.Sscan(args[0].String(), &from)
+			_, err = fmt.Sscan(args[1].String(), &to)
+			if err != nil {
+				return nil
+			}
+
+			piece, _ := g.At(from)
+			if piece.Color != g.Active {
+				return nil
+			}
+			move := chess.Move{from, to}
+			g.Exec(move)
+
+			return true
+		}))
 
 	<-done
 }

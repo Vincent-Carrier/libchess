@@ -26,9 +26,3 @@ type (
 func (m Move) Execute(g *Game) {
 	panic("implement me")
 }
-func (m Capture) Execute(g *Game) {
-	panic("implement me")
-}
-func (m EnPassant) Execute(g *Game) {
-	panic("implement me")
-}
