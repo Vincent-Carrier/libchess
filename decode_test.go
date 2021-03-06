@@ -36,7 +36,6 @@ func TestBoard_Scan(t *testing.T) {
 	}
 	var b Board
 	_, err := fmt.Sscan("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", &b)
-	println(b.String())
 	assert.Nil(t, err)
 
 	for i, tt := range tests {

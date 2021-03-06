@@ -24,6 +24,10 @@ func NewGame(fen string) (g *Game, err error) {
 	//TODO: figure out why a single Sscan doesn't work
 	parts := strings.Split(fen, " ")
 	_, err = fmt.Sscan(parts[0], &g.Board)
+	if len(parts) == 1 {
+		g.Active = WHITE
+		return
+	}
 	_, err = fmt.Sscan(parts[1], &g.Active)
 	_, err = fmt.Sscan(parts[2], &g.Castles)
 	_, err = fmt.Sscan(parts[3], &g.EnPassant)

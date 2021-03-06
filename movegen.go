@@ -16,15 +16,18 @@ func slide(g *Game, from, towards Sq) (Sq, Piece, bool) {
 	return sq, capture, ok && g.Active != capture.Color
 }
 
+func (moves *Moves) append(move Mover) {
+	*moves = append(*moves, move)
+}
+
 func (moves *Moves) push(from, to Sq, capture Piece, color Color) bool {
-	println("pushed ", to.String())
 	var move Mover = Move{from, to}
 	if capture.Color == -color {
 		move = Capture{move.(Move), capture}
-		*moves = append(*moves, move)
+		moves.append(move)
 		return false
 	}
-	*moves = append(*moves, move)
+	moves.append(move)
 	return true
 }
 
@@ -37,25 +40,25 @@ func ray(g *Game, from, towards Sq, moves *Moves) {
 	}
 }
 
-func rays(g *Game, from Sq, rays []Sq) (result *Moves) {
-	result = new(Moves)
+func rays(g *Game, from Sq, rays []Sq) *Moves {
+	moves := new(Moves)
 	for _, towards := range rays {
-		ray(g, from, towards, result)
+		ray(g, from, towards, moves)
 	}
-	return
+	return moves
 }
 
-func (p Pawn) Moves(g *Game, from Sq) (moves *Moves) {
-	moves = new(Moves)
+func (p Pawn) Moves(g *Game, from Sq) *Moves {
+	moves := new(Moves)
 	fwd := Sq(g.Active)
 	to, capture, ok := slide(g, from, fwd*ROW)
 	if ok && capture.Color != -g.Active {
-		*moves = append(*moves, Move{from, to})
+		moves.append(Move{from, to})
 	}
 	if from.Rank() == g.Active.pawnRow() {
 		to, capture, ok := slide(g, from, 2*fwd*ROW)
 		if ok && capture.Color != -g.Active {
-			*moves = append(*moves, Move{from, to})
+			moves.append(Move{from, to})
 		}
 	}
 	for _, x := range []int{-1, 1} {
@@ -63,7 +66,7 @@ func (p Pawn) Moves(g *Game, from Sq) (moves *Moves) {
 			moves.push(from, to, capture, g.Active)
 		}
 	}
-	return
+	return moves
 }
 
 func (k Knight) Moves(g *Game, from Sq) (moves *Moves) {
@@ -79,9 +82,11 @@ func (k Knight) Moves(g *Game, from Sq) (moves *Moves) {
 func (b Bishop) Moves(g *Game, from Sq) *Moves {
 	return rays(g, from, BISHOP_RAYS)
 }
+
 func (r Rook) Moves(g *Game, from Sq) *Moves {
 	return rays(g, from, ROOK_RAYS)
 }
+
 func (q Queen) Moves(g *Game, from Sq) *Moves {
 	return rays(g, from, QUEEN_RAYS)
 }
