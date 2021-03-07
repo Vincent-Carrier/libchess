@@ -13,15 +13,7 @@ func (sq Sq) String() string {
 	return fmt.Sprintf("%c%d", 'a'+sq.File(), sq.Rank()+1)
 }
 
-func (m Move) String() string {
-	return fmt.Sprintf("%v-%v", m.From, m.To)
-}
-func (m Capture) String() string {
-	return fmt.Sprintf("%v-%v", m.From, m.To)
-}
-func (m EnPassant) String() string {
-	return fmt.Sprintf("%v-%v", m.From, m.To)
-}
+
 
 func (p Piece) char() (r rune) {
 	switch p.Kind.(type) {

@@ -20,3 +20,7 @@ func (sq Sq) File() Sq {
 func (sq Sq) Inbounds() bool {
 	return sq&0x88 == 0
 }
+
+func (sq Sq) threatened(g *Game) {
+
+}

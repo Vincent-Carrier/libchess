@@ -1,28 +1,48 @@
 package chess
 
-import "fmt"
+import (
+	"encoding"
+	"fmt"
+)
 
 type (
 	Mover interface {
-		//Validate(g *Game) bool
 		Execute(g *Game)
 		fmt.Stringer
+		encoding.TextUnmarshaler
 	}
 
 	Moves []Mover
 
-	Move struct {
+	Slide struct {
 		From, To Sq
 	}
 	Capture struct {
-		Move
+		Slide
 		Capture Piece
 	}
-	EnPassant struct {
-		Move
-	}
+	// EnPassant struct {
+	// 	Slide
+	// }
 )
 
-func (m Move) Execute(g *Game) {
-	panic("implement me")
+func (m *Slide) Execute(g *Game) {
+	p, _ := g.At(m.From)
+	g.Set(m.To, p)
+	g.Set(m.From, Piece{})
 }
+
+func (m *Slide) UnmarshalText(text []byte) error {
+	_, err := fmt.Sscanf(string(text), "%v-%v", &m.From, &m.To)
+	return err
+}
+
+func (m *Slide) String() string {
+	return fmt.Sprintf("%v-%v", m.From, m.To)
+}
+func (m *Capture) String() string {
+	return fmt.Sprintf("%v-%v", m.From, m.To)
+}
+// func (m EnPassant) String() string {
+// 	return fmt.Sprintf("%v-%v", m.From, m.To)
+// }

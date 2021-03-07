@@ -21,9 +21,10 @@ func (moves *Moves) append(move Mover) {
 }
 
 func (moves *Moves) push(from, to Sq, capture Piece, color Color) bool {
-	var move Mover = Move{from, to}
+	slide := Slide{from, to}
+	var move Mover = &slide
 	if capture.Color == -color {
-		move = Capture{move.(Move), capture}
+		move = &Capture{slide, capture}
 		moves.append(move)
 		return false
 	}
@@ -50,17 +51,18 @@ func rays(g *Game, from Sq, rays []Sq) *Moves {
 	return moves
 }
 
+
 func (p Pawn) Moves(g *Game, from Sq) *Moves {
 	moves := new(Moves)
 	fwd := Sq(g.Active)
 	to, capture, ok := slide(g, from, fwd*ROW)
 	if ok && capture.Color != -g.Active {
-		moves.append(Move{from, to})
+		moves.append(&Slide{from, to})
 	}
 	if from.Rank() == g.Active.pawnRow() {
 		to, capture, ok := slide(g, from, 2*fwd*ROW)
 		if ok && capture.Color != -g.Active {
-			moves.append(Move{from, to})
+			moves.append(&Slide{from, to})
 		}
 	}
 	for _, x := range []int{-1, 1} {
@@ -100,5 +102,6 @@ func (k King) Moves(g *Game, from Sq) (moves *Moves) {
 			moves.push(from, to, capture, g.Active)
 		}
 	}
+
 	return
 }

@@ -9,59 +9,63 @@ import (
 	chess "github.com/Vincent-Carrier/libchess"
 )
 
-type match struct {
-	chess.Match
-	js.Value
+type Human struct{}
+
+func (h *Human) Validate(m chess.Mover, g *chess.Game) bool {
+	return true
+}
+
+func (h *Human) InvalidMove(err error) {
+	fmt.Println("invalid move: ", err)
+}
+
+func (h *Human) Prompt() {
+	// str := <-h.move
+	// _, err = fmt.Sscan(str, &move)
+	return
 }
 
 func main() {
-	done := make(chan bool)
-
+	m := chess.NewMatch(&Human{}, &Human{})
 	chessboard := js.Global().Get("ChessBoardElement")
-	chessboard.Get("prototype").Set("moves",
-		js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-			g, err := chess.NewGame(this.Call("fen").String())
-			var sq chess.Sq
-			_, err = fmt.Sscan(args[0].String(), &sq)
-			if err != nil {
-				return nil
-			}
-
-			var moves []interface{}
-			if piece, ok := g.At(sq); !ok || piece.Color != g.Active {
-				return moves
-			}
-			for _, move := range g.MovesFrom(sq) {
+	chessboard.Get("prototype").Set(
+		"moves",
+		js.FuncOf(
+			func(this js.Value, args []js.Value) interface{} {
 				var sq chess.Sq
-				switch move := move.(type) {
-				case chess.Move:
-					sq = move.To
-				case chess.Capture:
-					sq = move.To
+				_, err := fmt.Sscan(args[0].String(), &sq)
+				if err != nil {
+					return nil
 				}
-				moves = append(moves, sq.String())
-			}
-			return moves
-		}))
-	chessboard.Get("prototype").Set("exec",
-		js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-			g, err := chess.NewGame(this.Call("fen").String())
-			var from, to chess.Sq
-			_, err = fmt.Sscan(args[0].String(), &from)
-			_, err = fmt.Sscan(args[1].String(), &to)
-			if err != nil {
-				return nil
-			}
 
-			piece, _ := g.At(from)
-			if piece.Color != g.Active {
-				return nil
-			}
-			move := chess.Move{from, to}
-			g.Exec(move)
-
-			return true
-		}))
-
-	<-done
+				var moves []interface{}
+				if piece, ok := m.At(sq); !ok || piece.Color != m.Active {
+					return nil
+				}
+				for _, move := range m.MovesFrom(sq) {
+					var sq chess.Sq
+					switch move := move.(type) {
+					case *chess.Slide:
+						sq = move.To
+					case *chess.Capture:
+						sq = move.To
+					}
+					moves = append(moves, sq.String())
+				}
+				return moves
+			},
+		),
+	)
+	chessboard.Get("prototype").Set(
+		"move",
+		js.FuncOf(
+			func(this js.Value, args []js.Value) interface{} {
+				move := chess.Slide{}
+				move.UnmarshalText([]byte(args[0].String()))
+				m.Input <- &move
+				return true
+			},
+		),
+	)
+	m.Start()
 }

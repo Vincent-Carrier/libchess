@@ -41,3 +41,13 @@ func (color Color) pawnRow() Sq {
 		panic("invalid color")
 	}
 }
+func (color Color) kingRow() Sq {
+	switch color {
+	case WHITE:
+		return 0
+	case BLACK:
+		return 7
+	default:
+		panic("invalid color")
+	}
+}
