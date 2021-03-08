@@ -6,7 +6,14 @@ import (
 )
 
 type (
-	Board   [128]Piece
+	Board struct {
+		squares [128]Piece
+		pieces  [2][]Sq
+	}
+	Pieces []struct{
+		Piece
+		Sq
+	}
 	Castles [2][2]bool // [White, Black][Queen, King]
 
 	Game struct {
@@ -18,7 +25,6 @@ type (
 		FullMoves     int
 	}
 )
-
 
 func NewGame(fen string) (g *Game, err error) {
 	g = new(Game)
@@ -50,14 +56,14 @@ func (b *Board) At(sq Sq) (p Piece, ok bool) {
 	if !sq.Inbounds() {
 		return
 	}
-	return b[sq], true
+	return b.squares[sq], true
 }
 
 func (b *Board) Set(sq Sq, p Piece) {
 	if !sq.Inbounds() {
 		panic("invalid square")
 	}
-	b[sq] = p
+	b.squares[sq] = p
 }
 
 func (g *Game) MovesFrom(sq Sq) (moves Moves) {

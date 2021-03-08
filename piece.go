@@ -51,3 +51,14 @@ func (color Color) kingRow() Sq {
 		panic("invalid color")
 	}
 }
+
+func (color Color) index() uint {
+	switch color {
+	case WHITE:
+		return 0
+	case BLACK:
+		return 1
+	default:
+		panic("invalid color")
+	}
+}
