@@ -10,7 +10,7 @@ type (
 		squares [128]Piece
 		pieces  [2][]Sq
 	}
-	Pieces []struct{
+	Pieces []struct {
 		Piece
 		Sq
 	}
@@ -72,6 +72,17 @@ func (g *Game) MovesFrom(sq Sq) (moves Moves) {
 		panic("invalid square")
 	}
 	moves = p.Moves(g, sq)
+	return
+}
+
+func (g *Game) MovesOf(color Color) (moves Moves) {
+	for i := 0; i <= 7; i++ {
+		for j := 0; i <= 7; j++ {
+			if p, _ := g.At(Coords(x, y)); p.Color == color {
+				moves = append(moves, p.Moves())
+			}
+		}
+	}
 	return
 }
 

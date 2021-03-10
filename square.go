@@ -17,6 +17,10 @@ func (sq Sq) File() Sq {
 	return sq & 0x07
 }
 
+func Coords(x, y int) Sq {
+	return Sq(x | (y << 4))
+}
+
 func (sq Sq) Inbounds() bool {
 	return sq&0x88 == 0
 }
