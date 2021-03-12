@@ -23,7 +23,7 @@ func move(str string) (move Slide) {
 }
 
 func (g *Game) at(sq string) Piece {
-	p := g.Board[square(sq)]
+	p := g.MustAt(square(sq))
 	return p
 }
 
@@ -31,7 +31,7 @@ func (g *Game) move(s string) error {
 	var from, to Sq
 	_, err := fmt.Sscanf(s, "%v-%v", &from, &to)
 	p, _ := g.At(from)
-	g.Board[to] = p
-	g.Board[from] = Piece{}
+	g.Set(to, p)
+	g.Set(from, Piece{})
 	return err
 }

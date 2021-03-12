@@ -40,7 +40,7 @@ func TestBoard_Scan(t *testing.T) {
 
 	for i, tt := range tests {
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
-			got := b[tt.Sq]
+			got := b.MustAt(tt.Sq)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -48,7 +48,7 @@ func TestBoard_Scan(t *testing.T) {
 
 func TestGame_Scan(t *testing.T) {
 	g := StartingPosition()
-	assert.Equal(t, Piece{WHITE, Pawn{}}, g.Board[square("e2")])
+	assert.Equal(t, Piece{WHITE, Pawn{}}, g.MustAt(square("e2")))
 	assert.Equal(t, WHITE, g.Active)
 	assert.True(t, g.Castles[0][0])
 	assert.Equal(t, NIL_SQ, g.EnPassant)

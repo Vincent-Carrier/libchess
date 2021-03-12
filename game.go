@@ -58,6 +58,11 @@ func (b *Board) At(sq Sq) (p Piece, ok bool) {
 	}
 	return b.squares[sq], true
 }
+func (b *Board) MustAt(sq Sq) (p Piece) {
+	p, ok := b.At(sq)
+	if !ok { panic("invalid square") }
+	return
+}
 
 func (b *Board) Set(sq Sq, p Piece) {
 	if !sq.Inbounds() {
@@ -67,19 +72,18 @@ func (b *Board) Set(sq Sq, p Piece) {
 }
 
 func (g *Game) MovesFrom(sq Sq) (moves Moves) {
-	p, ok := g.At(sq)
-	if !ok {
-		panic("invalid square")
-	}
+	p := g.MustAt(sq)
 	moves = p.Moves(g, sq)
 	return
 }
 
+//TODO: optimize
 func (g *Game) MovesOf(color Color) (moves Moves) {
-	for i := 0; i <= 7; i++ {
-		for j := 0; i <= 7; j++ {
-			if p, _ := g.At(Coords(x, y)); p.Color == color {
-				moves = append(moves, p.Moves())
+	for x := 0; x <= 7; x++ {
+		for y := 0; x <= 7; y++ {
+			sq := Coords(x, y)
+			if p, _ := g.At(sq); p.Color == color {
+				moves = append(moves, p.Moves(g, sq)...)
 			}
 		}
 	}

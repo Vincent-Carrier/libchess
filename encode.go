@@ -64,6 +64,6 @@ func (b *Board) String() string {
 			sq++
 		}
 	}
-	buf.WriteRune(b[0x07].char())
+	buf.WriteRune(b.MustAt(0x07).char())
 	return buf.String()
 }

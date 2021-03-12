@@ -90,7 +90,7 @@ func (b *Board) Scan(state fmt.ScanState, _ rune) (err error) {
 			sq -= ROW
 			sq -= sq & 0x08
 		} else if _, err = fmt.Sscan(string(r), &p); err == nil {
-			b[sq] = p
+			b.Set(sq, p)
 			sq++
 		} else {
 			return fmt.Errorf("invalid board rune %c", r)

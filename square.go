@@ -25,6 +25,14 @@ func (sq Sq) Inbounds() bool {
 	return sq&0x88 == 0
 }
 
-func (sq Sq) threatened(g *Game) {
-
+func (sq Sq) threatened(g *Game) bool {
+	for _, m := range g.MovesOf(-g.Active) {
+		switch m := m.(type) {
+			case *Capture:
+				if m.To == sq {
+					return true
+				}
+		}
+	}
+	return false
 }
