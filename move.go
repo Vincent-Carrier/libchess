@@ -12,18 +12,23 @@ type (
 		encoding.TextUnmarshaler
 	}
 
-	Moves []Mover
-
 	Slide struct {
 		From, To Sq
-	}
-	Capture struct {
-		Slide
 		Capture Piece
 	}
 	// EnPassant struct {
 	// 	Slide
 	// }
+	// Castle struct {
+	// 	Side
+	// }
+
+	Side uint8
+)
+
+const (
+	KINGSIDE Side = iota
+	QUEENSIDE
 )
 
 func (m *Slide) Execute(g *Game) {
@@ -37,10 +42,7 @@ func (m *Slide) UnmarshalText(text []byte) error {
 	return err
 }
 
-func (m *Slide) String() string {
-	return fmt.Sprintf("%v-%v", m.From, m.To)
-}
-func (m *Capture) String() string {
+func (m Slide) String() string {
 	return fmt.Sprintf("%v-%v", m.From, m.To)
 }
 // func (m EnPassant) String() string {

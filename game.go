@@ -71,14 +71,14 @@ func (b *Board) Set(sq Sq, p Piece) {
 	b.squares[sq] = p
 }
 
-func (g *Game) MovesFrom(sq Sq) (moves Moves) {
+func (g *Game) MovesFrom(sq Sq) (moves []Mover) {
 	p := g.MustAt(sq)
 	moves = p.Moves(g, sq)
 	return
 }
 
 //TODO: optimize
-func (g *Game) MovesOf(color Color) (moves Moves) {
+func (g *Game) MovesOf(color Color) (moves []Mover) {
 	for x := 0; x <= 7; x++ {
 		for y := 0; x <= 7; y++ {
 			sq := Coords(x, y)
