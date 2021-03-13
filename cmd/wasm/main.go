@@ -26,28 +26,33 @@ func (h *Human) Prompt() {
 }
 
 func main() {
-	m := chess.NewMatch(&Human{}, &Human{})
-	chessboard := js.Global().Get("ChessBoardElement")
-	chessboard.Get("prototype").Set(
+	var m *chess.Match
+	js.Global().Set("Match", js.FuncOf(
+			func(this js.Value, args []js.Value) interface{} {
+				m = chess.NewMatch(&Human{}, &Human{})
+				m.Start()
+				this.Set("board", args[0])
+				return nil
+			},
+	))
+	js.Global().Get("Match").Get("prototype").Set(
 		"moves",
 		js.FuncOf(
 			func(this js.Value, args []js.Value) interface{} {
-				var sq chess.Sq
-				_, err := fmt.Sscan(args[0].String(), &sq)
+				var from chess.Sq
+				_, err := fmt.Sscan(args[0].String(), &from)
 				if err != nil {
 					return nil
 				}
 
 				var moves []interface{}
-				if piece, ok := m.At(sq); !ok || piece.Color != m.Active {
+				if piece, ok := m.At(from); !ok || piece.Color != m.Active {
 					return nil
 				}
-				for _, move := range m.MovesFrom(sq) {
+				for _, move := range m.MovesFrom(from) {
 					var sq chess.Sq
 					switch move := move.(type) {
 					case *chess.Slide:
-						sq = move.To
-					case *chess.Capture:
 						sq = move.To
 					}
 					moves = append(moves, sq.String())
@@ -56,7 +61,7 @@ func main() {
 			},
 		),
 	)
-	chessboard.Get("prototype").Set(
+	js.Global().Get("Match").Get("prototype").Set(
 		"move",
 		js.FuncOf(
 			func(this js.Value, args []js.Value) interface{} {
@@ -67,5 +72,4 @@ func main() {
 			},
 		),
 	)
-	m.Start()
 }
