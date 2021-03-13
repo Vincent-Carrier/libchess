@@ -13,13 +13,14 @@ func square(str string) (sq Sq) {
 	return sq
 }
 
-func move(str string) (move Slide) {
+func move(str string) Mover {
+	var move Slide
 	_, err := fmt.Sscanf(str, "%v-%v", &move.From, &move.To)
 	if err != nil {
 		panic(err)
 	}
 
-	return move
+	return &move
 }
 
 func (g *Game) at(sq string) Piece {
