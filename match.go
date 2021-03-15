@@ -5,7 +5,7 @@ type (
 		*Game
 		ActivePlayer Player
 		White, Black Player
-		History []Mover
+		History      []Mover
 		Outcome
 		Input chan Mover
 	}

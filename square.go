@@ -28,10 +28,10 @@ func (sq Sq) Inbounds() bool {
 func (sq Sq) threatened(g *Game) bool {
 	for _, m := range g.MovesOf(-g.Active) {
 		switch m := m.(type) {
-			case *Slide:
-				if (m.Capture != Piece{}) && m.To == sq {
-					return true
-				}
+		case *Slide:
+			if (m.Capture != Piece{}) && m.To == sq {
+				return true
+			}
 		}
 	}
 	return false

@@ -8,5 +8,5 @@ wasm:
 
 tiny_wasm:
 	tinygo build -o ../vcar.dev/static/chess/main.min.wasm \
-							 -target wasm \
+							 -no-debug \
 							 ./cmd/wasm/main.go
