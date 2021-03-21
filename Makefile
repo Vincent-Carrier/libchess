@@ -4,9 +4,8 @@ test:
 	go test -json | tparse -all
 
 wasm:
-	GOOS=js GOARCH=wasm go build -o ../vcar.dev/static/chess/main.wasm
+	GOOS=js GOARCH=wasm go build -o ../vcar.dev/static/chess/main.wasm ./cmd/wasm/
 
 tiny_wasm:
 	tinygo build -o ../vcar.dev/static/chess/main.min.wasm \
-							 -no-debug \
-							 ./cmd/wasm/main.go
+							 -no-debug ./cmd/wasm/

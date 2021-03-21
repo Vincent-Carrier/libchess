@@ -16,11 +16,11 @@ func slide(g *Game, from, towards Sq) (Sq, Piece, bool) {
 	return sq, capture, ok && g.Active != capture.Color
 }
 
-func ray(g *Game, from, towards Sq, moves []Mover) {
+func ray(g *Game, from, towards Sq, moves *[]Mover) {
 	if to, capture, ok := slide(g, from, towards); !ok {
 		return
 	} else {
-		moves = append(moves, &Slide{from, to, capture})
+		*moves = append(*moves, &Slide{from, to, capture})
 		if capture.Color != -g.Active {
 			ray(g, to, towards, moves)
 		}
@@ -29,7 +29,7 @@ func ray(g *Game, from, towards Sq, moves []Mover) {
 
 func rays(g *Game, from Sq, rays []Sq) (moves []Mover) {
 	for _, towards := range rays {
-		ray(g, from, towards, moves)
+		ray(g, from, towards, &moves)
 	}
 	return moves
 }

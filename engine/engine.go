@@ -4,7 +4,7 @@ import (
 	. "github.com/Vincent-Carrier/libchess"
 )
 
-func PieceValue(p Piecer) (f float32) {
+func pieceValue(p Piecer) (f float32) {
 	switch p.(type) {
 	case Pawn:
 		f = 1.
@@ -20,4 +20,12 @@ func PieceValue(p Piecer) (f float32) {
 		f = 100.
 	}
 	return
+}
+
+func Eval(g *Game) (score float32) {
+	for _, pp := range g.PiecesOf(BLACK + WHITE) {
+		score += pieceValue(pp.Piece)
+	}
+
+	return score
 }

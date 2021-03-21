@@ -1,36 +1,59 @@
 // +build js,wasm
-
 package main
 
 import (
 	"fmt"
-	chess "github.com/Vincent-Carrier/libchess"
+	"log"
 	"syscall/js"
+
+	"github.com/Vincent-Carrier/libchess"
 )
 
-var matches map[string]chess.Match
+var matches map[string]*chess.Match = make(map[string]*chess.Match)
 
 func main() {
 	js.Global().Set("chess", map[string]interface{}{
-		"moves": js.FuncOf(moves),
+		"newMatch": js.FuncOf(newMatch),
+		"moves":    js.FuncOf(moves),
+		"exec":     js.FuncOf(exec),
 	})
 
 	wait := make(chan bool)
 	<-wait
 }
 
+var newMatch = func(this js.Value, args []js.Value) interface{} {
+	matchId := args[0].String()
+	match := chess.NewMatch(&Human{}, &Human{})
+	matches[matchId] = match
+	this.Set("matchId", matchId)
+	go match.Start()
+	return nil
+}
+
 var moves = func(this js.Value, args []js.Value) interface{} {
-	g, _ := chess.NewGame(args[0].String())
+	match := matches[this.Get("matchId").String()]
 	var sq chess.Sq
-	_, _ = fmt.Sscan(args[1].String(), &sq)
+	_, _ = fmt.Sscan(args[0].String(), &sq)
 	var moves []interface{}
-	for _, m := range g.MovesFrom(sq) {
+	if match.MustAt(sq).Color != match.Active {
+		return moves
+	}
+	for _, m := range match.MovesFrom(sq) {
 		moves = append(moves, m.(*chess.Slide).To.String())
 	}
 
 	return moves
 }
 
-var move = func(this js.Value, args []js.Value) interface{} {
+var exec = func(this js.Value, args []js.Value) interface{} {
+	match := matches[this.Get("matchId").String()]
+	var move chess.Mover = new(chess.Slide)
+	str := args[0].String()
+	err := move.UnmarshalText([]byte(str))
+	if err != nil {
+		log.Fatalln("invalid move string: ", str)
+	}
+	match.Input <- move
 	return nil
 }

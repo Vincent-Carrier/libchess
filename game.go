@@ -10,7 +10,7 @@ type (
 		squares [128]Piece
 		pieces  [2][]Sq
 	}
-	Pieces []struct {
+	PlacedPiece struct {
 		Piece
 		Sq
 	}
@@ -60,7 +60,9 @@ func (b *Board) At(sq Sq) (p Piece, ok bool) {
 }
 func (b *Board) MustAt(sq Sq) (p Piece) {
 	p, ok := b.At(sq)
-	if !ok { panic("invalid square") }
+	if !ok {
+		panic("invalid square")
+	}
 	return
 }
 
@@ -74,6 +76,19 @@ func (b *Board) Set(sq Sq, p Piece) {
 func (g *Game) MovesFrom(sq Sq) (moves []Mover) {
 	p := g.MustAt(sq)
 	moves = p.Moves(g, sq)
+	return
+}
+
+//TODO: optimize
+func (g *Game) PiecesOf(color Color) (pieces []PlacedPiece) {
+	for x := 0; x <= 7; x++ {
+		for y := 0; x <= 7; y++ {
+			sq := Coords(x, y)
+			if p, _ := g.At(sq); color == EMPTY && p.Color != EMPTY || p.Color == color {
+				pieces = append(pieces, PlacedPiece{p, sq})
+			}
+		}
+	}
 	return
 }
 

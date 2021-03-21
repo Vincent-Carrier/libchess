@@ -10,9 +10,9 @@ type (
 		Input chan Mover
 	}
 	Player interface {
-		Prompt()
-		InvalidMove(err error)
+		Prompt(match *Match)
 		Validate(m Mover, g *Game) bool
+		// InvalidMove(err error)
 	}
 	Outcome int
 )
@@ -35,7 +35,7 @@ func NewMatch(w, b Player) (m *Match) {
 
 func (m *Match) Start() {
 	for move := range m.Input {
-		m.Game.Exec(move)
+		m.Exec(move)
 		if m.ActivePlayer == m.White {
 			m.ActivePlayer = m.Black
 		} else {
