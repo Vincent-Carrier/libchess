@@ -1,7 +1,7 @@
 .PHONY: test wasm tiny_wasm
 
 test:
-	go test | rg FAIL --context 20
+	go test -json | tparse -all
 
 wasm:
 	GOOS=js GOARCH=wasm go build -o ../vcar.dev/static/chess/main.wasm

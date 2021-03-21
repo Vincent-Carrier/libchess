@@ -14,7 +14,7 @@ type (
 
 	Slide struct {
 		From, To Sq
-		Capture Piece
+		Capture  Piece
 	}
 	// EnPassant struct {
 	// 	Slide
@@ -45,6 +45,7 @@ func (m *Slide) UnmarshalText(text []byte) error {
 func (m Slide) String() string {
 	return fmt.Sprintf("%v-%v", m.From, m.To)
 }
+
 // func (m EnPassant) String() string {
 // 	return fmt.Sprintf("%v-%v", m.From, m.To)
 // }

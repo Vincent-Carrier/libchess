@@ -12,7 +12,7 @@ func TestSquare_String(t *testing.T) {
 		sq   Sq
 		want string
 	}{
-		{0x00, "a1"},
+		{0x01, "a1"},
 		{0x07, "h1"},
 		{0x34, "e4"},
 		{0x77, "h8"},
@@ -73,8 +73,8 @@ func TestSquare_Inbounds(t *testing.T) {
 }
 
 func TestSquare_Arithmetic(t *testing.T) {
-	assert.Equal(t, square("a1") + 0x07, square("h1"))
-	assert.Equal(t, square("a1") + ROW, square("a2"))
+	assert.Equal(t, square("a1")+0x07, square("h1"))
+	assert.Equal(t, square("a1")+ROW, square("a2"))
 	assert.Equal(t, square("a4").Rank(), Sq(3))
 	assert.Equal(t, square("a4").File(), Sq(0))
 }

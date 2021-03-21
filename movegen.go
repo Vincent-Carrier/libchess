@@ -1,7 +1,7 @@
 package chess
 
 var (
-	BISHOP_RAYS = []Sq{-ROW - 1, -ROW + 1, +ROW - 1, +ROW+1}
+	BISHOP_RAYS = []Sq{-ROW - 1, -ROW + 1, +ROW - 1, +ROW + 1}
 	ROOK_RAYS   = []Sq{-1, 1, -ROW, +ROW}
 	QUEEN_RAYS  = append(BISHOP_RAYS, ROOK_RAYS...)
 	KNIGHT_RAYS = []Sq{
@@ -33,7 +33,6 @@ func rays(g *Game, from Sq, rays []Sq) (moves []Mover) {
 	}
 	return moves
 }
-
 
 func (p Pawn) Moves(g *Game, from Sq) (moves []Mover) {
 	fwd := Sq(g.Active)
